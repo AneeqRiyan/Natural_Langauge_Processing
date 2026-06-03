@@ -1,0 +1,33 @@
+# DeBERTa Fine-tuning Configuration for Homonym Sense Plausibility Prediction
+
+# Model Configuration
+model_name: "microsoft/deberta-v3-large"
+max_length: 512
+hidden_dropout_prob: 0.2
+
+# Training Configuration
+batch_size: 8
+gradient_accumulation_steps: 4
+num_epochs: 3
+learning_rate: 2e-5
+weight_decay: 1e-2
+warmup_ratio: 0.1  # 10% of total steps for warmup
+
+# Evaluation Configuration
+eval_steps: 500
+eval_batch_size: 32
+
+# Hardware Configuration
+device: "cpu"  # Change to "cuda" when GPU is available
+mixed_precision: true  # Enable mixed precision for memory efficiency
+
+# Data Configuration
+train_file: "train.json"
+dev_file: "dev.json"
+target_min: 1.0
+target_max: 5.0
+
+# Optimization
+seed: 42
+checkpoint_dir: "checkpoints"
+log_dir: "logs"
