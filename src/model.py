@@ -23,7 +23,7 @@ class HomonymRegressionModel(nn.Module):
         self,
         model_name: str = "microsoft/deberta-v3-large",
         dropout_prob: float = 0.2,
-        num_frozen_layers: int = 19,  # Freeze all but last layer of DeBERTa base
+        num_frozen_layers: int = 2,  # Freeze all but last layer of DeBERTa base
     ):
         """
         Args:
