@@ -122,7 +122,7 @@ def create_model(config: Dict) -> HomonymRegressionModel:
     model = HomonymRegressionModel(
         model_name=config.get('model_name', 'microsoft/deberta-v3-large'),
         dropout_prob=config.get('hidden_dropout_prob', 0.2),
-        num_frozen_layers=19,
+        num_frozen_layers=config.get('num_frozen_layers', 2),
     )
     
     trainable_params = model.get_trainable_params()
