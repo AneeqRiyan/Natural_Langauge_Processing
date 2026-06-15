@@ -13,4 +13,12 @@ Modules:
 - inference.py: Inference interface for new predictions
 """
 
+import os
+import sys
+
+# Add the package directory to sys.path to allow sibling modules to import each other directly
+package_dir = os.path.dirname(os.path.abspath(__file__))
+if package_dir not in sys.path:
+    sys.path.append(package_dir)
+
 __version__ = "1.0.0"
