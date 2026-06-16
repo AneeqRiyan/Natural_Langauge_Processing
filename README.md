@@ -20,6 +20,7 @@ code/
 ├── config.yaml                  # Hyperparameters and settings
 ├── requirements.txt             # Python dependencies
 ├── validate.py                  # Environment and data validation
+├── predict.py                   # Required submission entry point for predictions (SemEval Task 5 interface)
 ├── train.json                   # Training data (~200+ samples)
 ├── dev.json                     # Development/validation data (~200+ samples)
 ├── src/
@@ -113,21 +114,53 @@ Final Metrics:
 
 ### 5. Make Predictions on New Samples
 
-**Batch inference (with examples)**:
+#### A. Generate Submission Predictions (Required Format)
+
+To generate predictions for evaluation (e.g., for SemEval submission) in the correct format, run the required entry-point script `predict.py` at the root of the project:
+
+```bash
+python predict.py <input_json> <output_jsonl>
+```
+
+For example, to predict on `dev.json` and save to `predictions.jsonl`:
+
+```bash
+python predict.py dev.json predictions.jsonl
+```
+
+This script will:
+- Load the configuration from `config.yaml`
+- Load the best model checkpoint from `checkpoints/best_model.pt`
+- Generate integer predictions rounded to the range `[1, 5]`
+- Output predictions in JSONL format, containing one `{"id": "...", "prediction": N}` object per line.
+
+#### B. Batch Inference Demo
+
+To run a demonstration on sample sentences:
+
 ```bash
 python src/inference.py checkpoints/best_model.pt
 ```
 
-This runs a demo with 3 example samples showing predicted plausibility scores.
+This runs a demo with 3 example samples showing predicted continuous plausibility scores.
 
-**Interactive inference**:
-Edit `src/inference.py` to use the `InferenceModel` class directly:
+#### C. Interactive Inference
+
+To run inference programmatically in your own script:
 
 ```python
+import yaml
+from pathlib import Path
 from src.inference import InferenceModel
 
+# Load config
+with open("config.yaml") as f:
+    config = yaml.safe_load(f)
+
+# Initialize inference model
 inference_model = InferenceModel("checkpoints/best_model.pt", config)
 
+# Predict score for a single sample
 result = inference_model.predict_single(
     precontext="The laboratory equipment was carefully arranged.",
     sentence="The researchers increased the potential gradually.",
